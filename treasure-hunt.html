@@ -1,0 +1,90 @@
+<!-- 
+
+TREASURE HUNT - CLICK ON MAP TO FIND TREASURE
+BELOW YOU CAN UNDERSTAND HOW FAR YOU ARE
+
+ -->
+<!DOCTYPE html>
+<html>
+     <head>
+         <meta charset="UTF-8">
+         <title>Find the treasure!</title>
+		 <style>
+			body{ scale: 90%;}
+		 </style>
+     </head>
+     <body>
+         <h1 id="heading">Find the treasure!</h1>
+         <img id="map" width=800 height=800 src="http://nostarch.com/images/treasuremap.png">
+         <p id="distance"></p>
+		 <p id="lastClicks"></p>
+         <script src="https://code.jquery.com/jquery-2.1.0.js"></script>
+         <script>
+		     // Переменная оставшихся кликов
+		     var i = 20;
+             // Получить случайное число от 0 до size-1
+             var getRandomNumber = function (size) {
+                 return Math.floor(Math.random() * size);
+             }; 
+			 // Вычислить расстояние от клика (event) до клада (target)
+			 var getDistance = function (event, target) {
+			     var diffX = event.offsetX - target.x;
+				 var diffY = event.offsetY - target.y;
+				 return Math.sqrt((diffX * diffX) + (diffY * diffY));
+			 };
+             // Получить для расстояния строку подсказки
+			 var getDistanceHint = function (distance) {
+			     if (distance < 20) {
+				     return "Burned! "  + Math.floor(distance);
+				 } else if (distance < 30) {
+                     return "Very very hot " + Math.floor(distance);
+				 } else if (distance < 40) {
+                     return "Very hot " + Math.floor(distance);
+                 } else if (distance < 80) {
+                     return "Hot " + Math.floor(distance);
+			   	 } else if (distance < 120) {
+                     return "Very warm " + Math.floor(distance);
+                 } else if (distance < 160) {
+                     return "Warm " + Math.floor(distance);
+                 } else if (distance < 320) {
+                     return "Cold " + Math.floor(distance);
+                 } else if (distance < 640) {
+                     return "Very cold "  + Math.floor(distance);
+				 } else if (distance < 720) {
+                     return "Very very cold " + Math.floor(distance);
+                 } else {
+                     return "Freeze! " + Math.floor(distance);
+                 }
+             };
+             // Создаем переменные
+             var width = 800;
+			 var height = 800;
+			 var clicks = 0;
+			 // Случайная позиция клада
+			 var target = {
+			     x: getRandomNumber(width),
+				 y: getRandomNumber(height)
+			 };
+			 // Добавляем элементу img обработчик клика
+			 $("#map").click(function (event, lastClicks) {
+			     i--;
+				 $("#lastClicks").text(" You have just " + i + " clicks");
+			     clicks++;
+				 // Получаем расстояние от места клика до клада
+				 var distance = getDistance(event, target);
+				 // Преобразуем расстояние в подсказку
+				 var distanceHint = getDistanceHint(distance);
+				 // Записываем в элемент #distance новую подсказку
+				 $("#distance").text(distanceHint);
+				 // Если клик был достаточно близко, поздравляем с победой
+				 if (distance < 17) {
+				     alert("Treasure found! Made by clicks: " + clicks);
+                 }
+				 // Проигрыш при 20 кликах
+				 if (clicks > 19) {
+				     return alert(" END OF THE GAME YOU LOST! ");
+			     }
+             });
+         </script>
+     </body>
+</html>

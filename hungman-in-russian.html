@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+     <head>
+	     <meta charset="UTF-8">
+         <title>Canvas</title>
+	 </head>
+	 <body>
+	     <h1>Hungman</h1>
+	     <canvas id="canvas" width="500" height="500"></canvas>
+		 <script>
+		 	 var canvas = document.getElementById("canvas");
+	         var ctx = canvas.getContext("2d");
+			 var drawStickMan = function(i) {
+			     ctx.lineWidth = 5;
+   	             if (i === 1) {
+       				 ctx.beginPath();
+			         ctx.moveTo(100, 180);
+	                 ctx.lineTo(120, 210);
+					 ctx.stroke();
+	   		     } else if (i === 2) {
+				     ctx.beginPath();
+			         ctx.moveTo(100, 180);
+	                 ctx.lineTo(80, 210);
+					 ctx.stroke();
+			     } else if (i === 3) {
+				     ctx.beginPath();
+			         ctx.moveTo(100, 150);
+					 ctx.lineTo(80, 130);
+					 ctx.stroke();
+			     } else if (i === 4) {
+				     ctx.beginPath();
+				         ctx.moveTo(100, 150);
+		                 ctx.lineTo(120, 130);
+						 ctx.stroke();
+			     } else if (i === 5) {
+				     ctx.beginPath();
+			         ctx.moveTo(100, 120);
+		             ctx.lineTo(100, 180);
+					 ctx.stroke(); 
+				 }
+			 }
+		      // Создаем массив со словами
+             var sports = ["олимпиада", "шайба", "клюшка", "мяч", "гантеля", "кроссовок", "хоккей", "футбол"];
+			 var word;
+			 var j = 0;
+			 var guess;
+			 var answerArray = [];
+			 var pickWord = function () {
+                 // Возвращает случайно выбранное слово
+				 word = sports[Math.floor(Math.random() * sports.length)];
+             };
+             var setupAnswerArray = function (word) {
+                 // Возвращает итоговый массив для заданного слова word
+                 for (var i = 0; i < word.length; i++) {
+                     answerArray[i] = "_";
+                 }
+             };
+             var showPlayerProgress = function (answerArray) {
+                 // С помощью alert отображает текущее состояние игры
+				  alert(answerArray.join(" "));
+             };
+             var getGuess = function () {
+                 // Запрашивает ответ игрока с помощью prompt
+				 guess = prompt("Угадайте букву, или нажмите Отмена для выхода из игры.");
+             };
+             var updateGameState = function (guess, word, answerArray) {
+                 // Обновляет answerArray согласно ответу игрока (guess)
+                 // возвращает число, обозначающее, сколько раз буква guess
+                 // встречается в слове, чтобы можно было обновить значение
+                 // remainingLetters
+				 for (j = 0; j < word.length; j++) {
+					 // Строчная буква
+                         if (word[j] === guess.toLowerCase()) {
+						     i = i - 1;
+						 // Проверка на повторный ввод буквы
+						     if (answerArray[j] === guess.toLowerCase()) {
+							     alert('Эта буква была уже введена');
+								 i = i - 1;
+							     remainingLetters++;
+							 }
+                             answerArray[j] = guess.toLowerCase();
+							 remainingLetters--;
+						 }
+					 }
+             };
+             var showAnswerAndCongratulatePlayer = function (answerArray) {
+                 // С помощью alert показывает игроку отгаданное слово
+                 // и поздравляет его с победой
+				 alert(answerArray.join(" "));
+				 alert("Отлично! Было загадано слово " + word);
+             };
+             // Выбираем случайное слово
+             pickWord()
+             // Создаем итоговый массив
+             setupAnswerArray(word);
+             var remainingLetters = word.length;
+			 alert('Это игра \"Виселица\". Угадайте слово из раздела спорт');
+             // Игровой цикл
+			 var i = 0;
+             while (remainingLetters > 0 && i < 6) {
+                 // Показываем состояние игры
+                 showPlayerProgress(answerArray) 
+                 // Запрашиваем вариант ответа
+                 getGuess()
+                 if (guess === null) {
+                     // Выходим из игрового цикла
+					 var end = confirm('Нажмите ОК для конца игры');
+                     break;
+                 } else if (guess.length !== 1) {
+                     alert("Пожалуйста, введите одиночную букву."); 
+					 i--;
+                 } else {
+                     // Обновляем состояние игры
+                     updateGameState(guess, word, answerArray)
+					 // В случае 6 ошибок повешанье
+					 } if (word[j] != guess.toLowerCase()) {
+						 i++;
+						 drawStickMan(i);
+						 if (i === 6) {
+						     break;
+						 }
+	   		     }
+             // Конец игрового цикла
+             }
+             // Отображаем ответ и поздравляем игрока
+			 if (true === end) {
+			     alert('Конец игры!!!');
+			 } else if (i === 6) {
+			     ctx.beginPath();
+				 ctx.arc(100, 100, 20, 0, Math.PI * 2);
+			  	 ctx.stroke();
+			     alert('Конец игры!!! ВАС ПОВЕСИЛИ!!!');
+		     } else {
+                 showAnswerAndCongratulatePlayer(answerArray);
+			 }
+ 		 </script>
+	 </body>
+</html>
